@@ -3,7 +3,7 @@
 Plugin Name: ALT Lab Global Surgery custom site stuff
 Plugin URI:  https://github.com/
 Description: Making the Global Surgery site better
-Version:     1.8
+Version:     1.82
 Author:      ALT Lab (Matt Roberts)
 Author URI:  http://altlab.vcu.edu
 License:     GPL2
@@ -15,15 +15,15 @@ Text Domain: my-toolset
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 
-// add_action('wp_enqueue_scripts', 'global_surg_load_scripts');
+add_action('wp_enqueue_scripts', 'global_surg_load_scripts');
 
-// function global_surg_load_scripts() {                           
-//     $deps = array('jquery');
-//     $version= '1.2'; 
-//     $in_footer = true;    
-//     wp_enqueue_script('global-surg-main-js', plugin_dir_url( __FILE__) . 'js/global-surg-main.js', $deps, $version, $in_footer); 
-//     wp_enqueue_style( 'global-surg-main-css', plugin_dir_url( __FILE__) . 'css/global-surg-main.css');
-// }
+function global_surg_load_scripts() {                           
+    $deps = array('jquery');
+    $version= '1.82'; 
+    $in_footer = true;    
+    wp_enqueue_script('global-surg-main-js', plugin_dir_url( __FILE__) . 'js/global-surg-main.js', $deps, $version, $in_footer); 
+    wp_enqueue_style( 'global-surg-main-css', plugin_dir_url( __FILE__) . 'css/global-surg-main.css');
+}
 
 //Disable the check for an email already being used by a registered user
 add_filter( 'gform_user_registration_check_email_pre_signup_activation', '__return_false' );
