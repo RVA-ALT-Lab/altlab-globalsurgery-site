@@ -78,45 +78,45 @@ function quiz_spitter() {
   
     echo '<div id="units-bar"><ul class="unit-list">';
   
-    if (in_array('1', $form_ids)) {
+    if (in_array('2', $form_ids)) {
      echo '<li class="unit-item-done" id="unit-1">&#x2713; Unit 1</li>';
      } else {
-        echo '<li class="unit-item" id="unit-1">Unit 1</li>';
-        }
-    if (in_array('2', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-2">&#x2713; Unit 2</li>';
-     } else {
-        echo '<li class="unit-item" id="unit-2">Unit 2</li>';
+        echo '<a href="https://rampages.us/vcuglobalsurgery/unit-1-global-burden-of-surgical-conditions-and-disease-injuries/"><button class="units-bar-button"><li class="unit-item" id="unit-1">Unit 1</li></button></a>';
         }
     if (in_array('3', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-3">&#x2713; Unit 3</li>';
+     echo '<li class="unit-item-done" id="unit-2">&#x2713; Unit 2</li>';
      } else {
-        echo '<li class="unit-item" id="unit-3">Unit 3</li>';
+        echo '<a href="https://rampages.us/vcuglobalsurgery/unit-2-globalization-of-health-and-health-care/"><button class="units-bar-button"><li class="unit-item" id="unit-2">Unit 2</li></button></a>';
         }
     if (in_array('4', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-4">&#x2713; Unit 4</li>';
+     echo '<li class="unit-item-done" id="unit-3">&#x2713; Unit 3</li>';
      } else {
-        echo '<li class="unit-item" id="unit-4">Unit 4</li>';
+        echo '<a href="https://rampages.us/vcuglobalsurgery/unit-3-social-and-environmental-determinants-of-heath/"><button class="units-bar-button"><li class="unit-item" id="unit-3">Unit 3</li></button></a>';
         }
     if (in_array('5', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-5">&#x2713; Unit 5</li>';
+     echo '<li class="unit-item-done" id="unit-4">&#x2713; Unit 4</li>';
      } else {
-        echo '<li class="unit-item" id="unit-5">Unit 5</li>';
+        echo '<a href="https://rampages.us/vcuglobalsurgery/unit-4-capacity-strengthening/"><button class="units-bar-button"><li class="unit-item" id="unit-4">Unit 4</li></button></a>';
         }
     if (in_array('6', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-6">&#x2713; Unit 6</li>';
+     echo '<li class="unit-item-done" id="unit-5">&#x2713; Unit 5</li>';
      } else {
-        echo '<li class="unit-item" id="unit-6">Unit 6</li>';
+        echo '<a href="https://rampages.us/vcuglobalsurgery/unit-5-collaboration-partnering-and-communication/"><button class="units-bar-button"><li class="unit-item" id="unit-5">Unit 5</li></button></a>';
         }
     if (in_array('7', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-7">&#x2713; Unit 7</li>';
+     echo '<li class="unit-item-done" id="unit-6">&#x2713; Unit 6</li>';
      } else {
-        echo '<li class="unit-item" id="unit-7">Unit 7</li>';
+        echo '<a href="https://rampages.us/vcuglobalsurgery/unit-6-ethics/"><button class="units-bar-button"><li class="unit-item" id="unit-6">Unit 6</li></button></a>';
         }
     if (in_array('8', $form_ids)) {
+     echo '<li class="unit-item-done" id="unit-7">&#x2713; Unit 7</li>';
+     } else {
+        echo '<a href="https://rampages.us/vcuglobalsurgery/unit-7-professional-practice/"><button class="units-bar-button"><li class="unit-item" id="unit-7">Unit 7</li></button></a>';
+        }
+    if (in_array('9', $form_ids)) {
      echo '<li class="unit-item-done" id="unit-8">&#x2713; Unit 8</li>';
      } else {
-        echo '<li class="unit-item" id="unit-8">Unit 8</li>';
+        echo '<a href="https://rampages.us/vcuglobalsurgery/unit-8-health-equity-and-social-justice/"><button class="units-bar-button"><li class="unit-item" id="unit-8">Unit 8</li></button></a>';
         }
   
     echo '</ul><div id="complete-mess"><p>&#x2713; = passed unit quiz</p></div></div>';
@@ -129,6 +129,48 @@ function quiz_spitter() {
   }
   
   add_shortcode( 'spit', 'quiz_spitter' );
+
+//Take next quiz checker
+//Must put custom field of 'quiz_check' with its value of 'quiz_x' on every quiz
+//NOTE: Quiz 1 is form ID 2, Quiz 2 is Form ID 3, etc
+//So Quiz 1 would have custom field value of quiz_1
+//but its quiz form ID is 2
+function take_this_quiz_or_not() {
+   $meta_value  = get_post_meta(get_the_ID(),'quiz_check',true);
+   echo ($meta_value);
+   $form_id = 0; //Look through all quizzes (can be more targeted)
+   $current_user = wp_get_current_user(); //Gets current logged in user
+   $search_criteria = array(
+      //Looking for quizzes passed by the current logged in user
+      'field_filters' => array(
+         'mode' => 'all',
+         array(
+               'key'   => 'gquiz_is_pass',
+               'value' => '1'
+         ),
+         array(
+            'key' => 'created_by',
+            'value' => $current_user->ID
+         ),
+      )
+   );
+   $entries = GFAPI::get_entries($form_id, $search_criteria, $sorting, $paging, $total_count);
+
+   $form_ids = array_column($entries, 'form_id');
+
+   if (in_array('2', $form_ids)) {
+      if ($meta_value == 'quiz_1') {
+         echo ('YES you can take the quiz');
+         } else {
+            echo ('No you cannot');
+            }
+         }
+   print("<pre>".print_r($form_ids,true)."</pre>");
+}
+
+add_shortcode('quiz_checker', 'take_this_quiz_or_not');
+
+
   
 //LOGGER -- like frogger but more useful
 
