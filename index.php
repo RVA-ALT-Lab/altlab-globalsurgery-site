@@ -131,17 +131,16 @@ function quiz_spitter() {
   add_shortcode( 'spit', 'quiz_spitter' );
 
 //Take next quiz checker
-//Must put custom field of 'quiz_check' with its value of 'quiz_x' on every quiz
-//NOTE: Quiz 1 is form ID 2, Quiz 2 is Form ID 3, etc
-//So Quiz 1 would have custom field value of quiz_1
-//but its quiz form ID is 2
+//NOTE: Quiz 2 is form ID 3, Quiz 3 is Form ID 4, etc
+//So Quiz 2 would have ACF field value of quiz_2
+//but its quiz gf form ID is 3...sorry
 function take_this_quiz_or_not() {
-   $meta_value  = get_post_meta(get_the_ID(),'quiz_check',true);
-   echo ($meta_value);
+   $acf_quiz_value  = get_field('quiz_check');
+   echo ($acf_quiz_value);
    $form_id = 0; //Look through all quizzes (can be more targeted)
    $current_user = wp_get_current_user(); //Gets current logged in user
    $search_criteria = array(
-      //Looking for quizzes passed by the current logged in user
+      //Looking for quizzes passed by the current logged in user with pass = 1
       'field_filters' => array(
          'mode' => 'all',
          array(
@@ -158,16 +157,79 @@ function take_this_quiz_or_not() {
 
    $form_ids = array_column($entries, 'form_id');
 
+   //Building all the checkers now for each quiz
+   //Starting with quiz 2 since you don't need to pass quiz 1 before you take it, duh
+   //I need this to loop through all of it to check each quiz scenario
+   //Not sure if i did this right
+   //
+   //Looking to see if Quiz 1 was passed when visiting the Quiz 2 page
    if (in_array('2', $form_ids)) {
-      if ($meta_value == 'quiz_1') {
+      //if it finds the form ID 2 (Quiz 1) in the passed array, and
+      if ($acf_quiz_value == 'quiz_2') {
+         //verifying this is the quiz 2 page, then
+         echo ('YES you can take the quiz');
+         //need to just display the quiz 2 content which is already loaded, or
+         } else {
+            echo ('No you cannot');
+            //This needs to hide the quiz page content and let the user know that
+            }
+         }
+   //Looking to see if Quiz 2 was passed when visiting the Quiz 3 page
+   if (in_array('3', $form_ids)) {
+      if ($acf_quiz_value == 'quiz_3') {
+         echo ('YES you can take the quiz');
+         } else {
+            echo ('No you cannot');
+            }
+         }
+   ///Looking to see if Quiz 3 was passed when visiting the Quiz 4 page
+   if (in_array('4', $form_ids)) {
+      if ($acf_quiz_value == 'quiz_4') {
+         echo ('YES you can take the quiz');
+         } else {
+            echo ('No you cannot');
+            }
+         }
+   ///Looking to see if Quiz 4 was passed when visiting the Quiz 5 page
+   if (in_array('5', $form_ids)) {
+      if ($acf_quiz_value == 'quiz_5') {
+         echo ('YES you can take the quiz');
+         } else {
+            echo ('No you cannot');
+            }
+         }
+   ///Looking to see if Quiz 5 was passed when visiting the Quiz 6 page
+   if (in_array('6', $form_ids)) {
+      if ($acf_quiz_value == 'quiz_6') {
+         echo ('YES you can take the quiz');
+         } else {
+            echo ('No you cannot');
+            }
+         }
+   ///Looking to see if Quiz 6 was passed when visiting the Quiz 7 page
+   if (in_array('7', $form_ids)) {
+      if ($acf_quiz_value == 'quiz_7') {
+         echo ('YES you can take the quiz');
+         } else {
+            echo ('No you cannot');
+            }
+         }
+   ///Looking to see if Quiz 7 was passed when visiting the Quiz 8 page
+   if (in_array('8', $form_ids)) {
+      if ($acf_quiz_value == 'quiz_8') {
          echo ('YES you can take the quiz');
          } else {
             echo ('No you cannot');
             }
          }
    print("<pre>".print_r($form_ids,true)."</pre>");
+
+
+
 }
 
+
+//This shorcode needs to go on every Quiz page
 add_shortcode('quiz_checker', 'take_this_quiz_or_not');
 
 
