@@ -79,42 +79,42 @@ function quiz_spitter() {
     echo '<div id="units-bar"><ul class="unit-list">';
   
     if (in_array('2', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-1">&#x2713; Unit 1</li>';
+     echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-1">&#x2713; Unit 1</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-1-global-burden-of-surgical-conditions-and-disease-injuries/"><button class="units-bar-button"><li class="unit-item" id="unit-1">Unit 1</li></button></a>';
         }
     if (in_array('3', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-2">&#x2713; Unit 2</li>';
+     echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-2">&#x2713; Unit 2</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-2-globalization-of-health-and-health-care/"><button class="units-bar-button"><li class="unit-item" id="unit-2">Unit 2</li></button></a>';
         }
     if (in_array('4', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-3">&#x2713; Unit 3</li>';
+     echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-3">&#x2713; Unit 3</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-3-social-and-environmental-determinants-of-heath/"><button class="units-bar-button"><li class="unit-item" id="unit-3">Unit 3</li></button></a>';
         }
     if (in_array('5', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-4">&#x2713; Unit 4</li>';
+     echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-4">&#x2713; Unit 4</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-4-capacity-strengthening/"><button class="units-bar-button"><li class="unit-item" id="unit-4">Unit 4</li></button></a>';
         }
     if (in_array('6', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-5">&#x2713; Unit 5</li>';
+     echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-5">&#x2713; Unit 5</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-5-collaboration-partnering-and-communication/"><button class="units-bar-button"><li class="unit-item" id="unit-5">Unit 5</li></button></a>';
         }
     if (in_array('7', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-6">&#x2713; Unit 6</li>';
+     echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-6">&#x2713; Unit 6</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-6-ethics/"><button class="units-bar-button"><li class="unit-item" id="unit-6">Unit 6</li></button></a>';
         }
     if (in_array('8', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-7">&#x2713; Unit 7</li>';
+     echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-7">&#x2713; Unit 7</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-7-professional-practice/"><button class="units-bar-button"><li class="unit-item" id="unit-7">Unit 7</li></button></a>';
         }
     if (in_array('9', $form_ids)) {
-     echo '<li class="unit-item-done" id="unit-8">&#x2713; Unit 8</li>';
+     echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-8">&#x2713; Unit 8</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-8-health-equity-and-social-justice/"><button class="units-bar-button"><li class="unit-item" id="unit-8">Unit 8</li></button></a>';
         }
@@ -139,6 +139,7 @@ function take_this_quiz_or_not() {
    echo ($acf_quiz_value);
    $form_id = 0; //Look through all quizzes (can be more targeted)
    $current_user = wp_get_current_user(); //Gets current logged in user
+   $quiz_warning = "You must PASS the previous Unit's Quiz before you can take this one."; //message if you didn't pass prevous quiz
    $search_criteria = array(
       //Looking for quizzes passed by the current logged in user with pass = 1
       'field_filters' => array(
