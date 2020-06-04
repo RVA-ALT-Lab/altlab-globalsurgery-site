@@ -107,7 +107,7 @@ function quiz_spitter() {
      echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-6">&#x2713; Unit 6</li></button>';
      } else {
         echo '<a href="https://rampages.us/vcuglobalsurgery/unit-6-ethics/"><button class="units-bar-button"><li class="unit-item" id="unit-6">Unit 6</li></button></a>';
-        }in
+        }
     if (in_array('8', $form_ids)) {
      echo '<button class="units-bar-button-done"><li class="unit-item-done" id="unit-7">&#x2713; Unit 7</li></button>';
      } else {
