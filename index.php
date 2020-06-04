@@ -135,11 +135,11 @@ function quiz_spitter() {
 //So Quiz 2 would have ACF field value of quiz_2
 //but its quiz gf form ID is 3...sorry
 function take_this_quiz_or_not() {
-   $acf_quiz_value  = get_field('quiz_check');
-   echo ($acf_quiz_value);
+   global $post;
+   $acf_quiz_value  = get_field('quiz_check', $post->ID);
+   // echo ($acf_quiz_value);
    $form_id = 0; //Look through all quizzes (can be more targeted)
    $current_user = wp_get_current_user(); //Gets current logged in user
-   $quiz_warning = "You must PASS the previous Unit's Quiz before you can take this one."; //message if you didn't pass prevous quiz
    $search_criteria = array(
       //Looking for quizzes passed by the current logged in user with pass = 1
       'field_filters' => array(
@@ -155,61 +155,38 @@ function take_this_quiz_or_not() {
       )
    );
    $entries = GFAPI::get_entries($form_id, $search_criteria, $sorting, $paging, $total_count);
-
    $form_ids = array_column($entries, 'form_id');
+   // print("<pre>".print_r($form_ids,true)."</pre>");
+   $found = previous_quiz_passed($acf_quiz_value, $form_ids);
+   return $found;
+}
 
-   //Building all the checkers now for each quiz
-   //Starting with quiz 2 since you don't need to pass quiz 1 before you take it, duh
-   //I need this to loop through all of it to check each quiz scenario
-   //Not sure if i did this right
-   //
-   //Looking to see if Quiz 1 was passed when visiting the Quiz 2 page
-   // if (in_array('2', $form_ids)) {
-   //    //if it finds the form ID 2 (Quiz 1) in the passed array, and
-   //    if ($acf_quiz_value == 'quiz_2') {
-   //       //verifying this is the quiz 2 page, then
-   //       echo ('YES you can take the quiz');
-   //       //need to just display the quiz 2 content which is already loaded, or
-   //       } else {
-   //          echo ('No you cannot');
-   //          //This needs to hide the quiz page content and let the user know that
-   //          }
-   //       }
-
-   // add_filter( 'the_content', 'previous_quiz_passed', 3 );
-
-   function previous_quiz_passed($acf_quiz_value, $form_ids) {
+function previous_quiz_passed($acf_quiz_value, $form_ids) {
    $previous_quiz_id = preg_split('/\_/' , $acf_quiz_value)[1];
    // var_dump($previous_quiz_id);
    // var_dump($form_ids);
       if (!in_array($previous_quiz_id, $form_ids)) {
-            return FALSE;
-            }
-            else {
-               return TRUE;
-            }
+         return FALSE;
          }
-         previous_quiz_passed($acf_quiz_value, $form_ids);
-
-      function failed_quiz($content) {
+         else {
+            return TRUE;
+         }
+      }
+  function failed_quiz($content) {
          global $post;
-         if (get_field('quiz_check', $post->ID) && previous_quiz_passed($acf_quiz_value, $form_ids) === FALSE) {
-            return "bad";
+         $quiz_warning = "<div id='access-flag'>You must PASS the previous Unit's Quiz before you can take this one.</div>"; //message if you didn't pass prevous quiz
+         if (get_field('quiz_check', $post->ID) === 'quiz_1') {
+            return $content;
+         }
+         if (get_field('quiz_check', $post->ID) && take_this_quiz_or_not() === FALSE) {
+            return $quiz_warning;
          }
          else {
             return $content;
          }
       }
-      
-   print("<pre>".print_r($form_ids,true)."</pre>");
-
-}
 
 add_filter( 'the_content', 'failed_quiz', 1 );
-
-
-//This shorcode needs to go on every Quiz page
-// add_shortcode('quiz_checker', 'take_this_quiz_or_not');
 
 
   
