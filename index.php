@@ -26,33 +26,33 @@ function global_surg_load_scripts() {
 }
 
 //Disable the check for an email already being used by a registered user
-// add_filter( 'gform_user_registration_check_email_pre_signup_activation', '__return_false' );
+add_filter( 'gform_user_registration_check_email_pre_signup_activation', '__return_false' );
 
-// add_filter( 'gform_user_registration_validation', 'ignore_already_registered_error', 10, 3 );
+add_filter( 'gform_user_registration_validation', 'ignore_already_registered_error', 10, 3 );
 
-// add_action("gform_user_registration_validation", "ignore_already_registered_error", 10, 3);
+add_action("gform_user_registration_validation", "ignore_already_registered_error", 10, 3);
 
-// function ignore_already_registered_error($form, $config, $pagenum){
+function ignore_already_registered_error($form, $config, $pagenum){
  
-//     // Make sure we only run this code on the specified form ID
-//     if($form['id'] != 10) {
-//         return $form;
-//     }
+    // Make sure we only run this code on the specified form ID
+    if($form['id'] != 10) {
+        return $form;
+    }
  
-//     // Get the ID of the email field from the User Registration config
-//     $email_id = $config['meta']['email'];
+    // Get the ID of the email field from the User Registration config
+    $email_id = $config['meta']['email'];
  
-//     // Loop through the current form fields
-//     foreach($form['fields'] as &$field) {
+    // Loop through the current form fields
+    foreach($form['fields'] as &$field) {
  
-//     // confirm that we are on the current field ID and that it has failed validation because the email already exists
-//     if($field->id == $email_id && $field->validation_message == 'Sorry, that email address is already used!')
-//         $field->failed_validation = false;
-//     }
+    // confirm that we are on the current field ID and that it has failed validation because the email already exists
+    if($field->id == $email_id && $field->validation_message == 'Sorry, that email address is already used!')
+        $field->failed_validation = false;
+    }
  
-//     return $form;
+    return $form;
  
-// }
+}
 
 // Quiz Competion Checker
 function quiz_spitter() {
@@ -164,74 +164,52 @@ function take_this_quiz_or_not() {
    //Not sure if i did this right
    //
    //Looking to see if Quiz 1 was passed when visiting the Quiz 2 page
-   if (in_array('2', $form_ids)) {
-      //if it finds the form ID 2 (Quiz 1) in the passed array, and
-      if ($acf_quiz_value == 'quiz_2') {
-         //verifying this is the quiz 2 page, then
-         echo ('YES you can take the quiz');
-         //need to just display the quiz 2 content which is already loaded, or
-         } else {
-            echo ('No you cannot');
-            //This needs to hide the quiz page content and let the user know that
+   // if (in_array('2', $form_ids)) {
+   //    //if it finds the form ID 2 (Quiz 1) in the passed array, and
+   //    if ($acf_quiz_value == 'quiz_2') {
+   //       //verifying this is the quiz 2 page, then
+   //       echo ('YES you can take the quiz');
+   //       //need to just display the quiz 2 content which is already loaded, or
+   //       } else {
+   //          echo ('No you cannot');
+   //          //This needs to hide the quiz page content and let the user know that
+   //          }
+   //       }
+
+   // add_filter( 'the_content', 'previous_quiz_passed', 3 );
+
+   function previous_quiz_passed($acf_quiz_value, $form_ids) {
+   $previous_quiz_id = preg_split('/\_/' , $acf_quiz_value)[1];
+   // var_dump($previous_quiz_id);
+   // var_dump($form_ids);
+      if (!in_array($previous_quiz_id, $form_ids)) {
+            return FALSE;
+            }
+            else {
+               return TRUE;
             }
          }
-   //Looking to see if Quiz 2 was passed when visiting the Quiz 3 page
-   if (in_array('3', $form_ids)) {
-      if ($acf_quiz_value == 'quiz_3') {
-         echo ('YES you can take the quiz');
-         } else {
-            echo ('No you cannot');
-            }
+         previous_quiz_passed($acf_quiz_value, $form_ids);
+
+      function failed_quiz($content) {
+         global $post;
+         if (get_field('quiz_check', $post->ID) && previous_quiz_passed($acf_quiz_value, $form_ids) === FALSE) {
+            return "bad";
          }
-   ///Looking to see if Quiz 3 was passed when visiting the Quiz 4 page
-   if (in_array('4', $form_ids)) {
-      if ($acf_quiz_value == 'quiz_4') {
-         echo ('YES you can take the quiz');
-         } else {
-            echo ('No you cannot');
-            }
+         else {
+            return $content;
          }
-   ///Looking to see if Quiz 4 was passed when visiting the Quiz 5 page
-   if (in_array('5', $form_ids)) {
-      if ($acf_quiz_value == 'quiz_5') {
-         echo ('YES you can take the quiz');
-         } else {
-            echo ('No you cannot');
-            }
-         }
-   ///Looking to see if Quiz 5 was passed when visiting the Quiz 6 page
-   if (in_array('6', $form_ids)) {
-      if ($acf_quiz_value == 'quiz_6') {
-         echo ('YES you can take the quiz');
-         } else {
-            echo ('No you cannot');
-            }
-         }
-   ///Looking to see if Quiz 6 was passed when visiting the Quiz 7 page
-   if (in_array('7', $form_ids)) {
-      if ($acf_quiz_value == 'quiz_7') {
-         echo ('YES you can take the quiz');
-         } else {
-            echo ('No you cannot');
-            }
-         }
-   ///Looking to see if Quiz 7 was passed when visiting the Quiz 8 page
-   if (in_array('8', $form_ids)) {
-      if ($acf_quiz_value == 'quiz_8') {
-         echo ('YES you can take the quiz');
-         } else {
-            echo ('No you cannot');
-            }
-         }
+      }
+      
    print("<pre>".print_r($form_ids,true)."</pre>");
-
-
 
 }
 
+add_filter( 'the_content', 'failed_quiz', 1 );
+
 
 //This shorcode needs to go on every Quiz page
-add_shortcode('quiz_checker', 'take_this_quiz_or_not');
+// add_shortcode('quiz_checker', 'take_this_quiz_or_not');
 
 
   
