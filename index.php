@@ -198,7 +198,7 @@ function cert_name_and_info () {
     </div><div class="cert-program">Program for Global Surgery</div>
     <div class="cert-title">Certificate of Completion</div>
     <p class="cert-course">Introduction to Global Surgery E-Learning Course</p>';
-    echo '<div class="cert-date">Non-Clinical 2 Week Elective - Completed on ' . date('d/m/Y') . '</div>'; 
+    echo '<div class="cert-date">Non-Clinical 2 Week Elective - Completed on ' . date('F jS, Y') . '</div>'; 
     echo '<div class="cert-name">' . $current_user->user_firstname . ' ' . $current_user->user_lastname . '</div>';
     echo '</div>';
 }
