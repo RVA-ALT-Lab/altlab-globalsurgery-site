@@ -3,7 +3,7 @@
 Plugin Name: ALT Lab Global Surgery custom site stuff
 Plugin URI:  https://github.com/
 Description: Global Surgery Registation fixes (JS), Read-only GF Registration fields (JS), Quiz Completion Checker, Units Bar Creator, etc.
-Version:     1.86
+Version:     1.88
 Author:      ALT Lab (Matt Roberts)
 Author URI:  http://altlab.vcu.edu
 License:     GPL2
@@ -19,7 +19,7 @@ add_action('wp_enqueue_scripts', 'global_surg_load_scripts');
 
 function global_surg_load_scripts() {                           
     $deps = array('jquery');
-    $version= '1.86'; 
+    $version= '1.88'; 
     $in_footer = true;    
     wp_enqueue_script('global-surg-main-js', plugin_dir_url( __FILE__) . 'js/global-surg-main.js', $deps, $version, $in_footer); 
     wp_enqueue_style( 'global-surg-main-css', plugin_dir_url( __FILE__) . 'css/global-surg-main.css');
@@ -188,8 +188,25 @@ function previous_quiz_passed($acf_quiz_value, $form_ids) {
 
 add_filter( 'the_content', 'failed_quiz', 1 );
 
+function cert_name_and_info () {
+   $current_user = wp_get_current_user();
+    echo '<h1 id="cert-congrats">Congratulations on completing the course!</h1>';
+    echo '<p class="cert-print">Here is your Certificate of Completion which you may print as acknowledgement. (Print this page from your web browser\'s file print options.)</p>';
+    echo '<div class="cert-container">';
+    echo '<div class="cert-logo">
+    <img src="http://rampages.us/vcuglobalsurgery/wp-content/uploads/sites/33974/2020/06/bm_SMed_Surgery_RF2_st_4c.png" >
+    </div><div class="cert-program">Program for Global Surgery</div>
+    <div class="cert-title">Certificate of Completion</div>
+    <p class="cert-course">Introduction to Global Surgery E-Learning Course</p>';
+    echo '<div class="cert-date">Non-Clinical 2 Week Elective - Completed on ' . date('d/m/Y') . '</div>'; 
+    echo '<div class="cert-name">' . $current_user->user_firstname . ' ' . $current_user->user_lastname . '</div>';
+    echo '</div>';
+}
 
-  
+add_shortcode( 'cert_info', 'cert_name_and_info' );
+
+
+
 //LOGGER -- like frogger but more useful
 
 if ( ! function_exists('write_log')) {
