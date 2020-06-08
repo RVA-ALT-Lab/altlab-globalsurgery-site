@@ -191,7 +191,7 @@ add_filter( 'the_content', 'failed_quiz', 1 );
 function cert_name_and_info () {
    $current_user = wp_get_current_user();
     echo '<h1 id="cert-congrats">Congratulations on completing the course!</h1>';
-    echo '<p class="cert-print">Here is your Certificate of Completion which you may print as acknowledgement. (Print this page from your web browser\'s file print options.)</p>';
+    echo '<p class="cert-print">Here is your Certificate of Completion which you may print as acknowledgement. (Print this page from your web browser\'s file print options.) </br>Also, please fill out this course\'s <a href="https://forms.gle/ix8QBc83MAxG3ien9">Course Evaluation form</a>.</p>';
     echo '<div class="cert-container">';
     echo '<div class="cert-logo">
     <img src="http://rampages.us/vcuglobalsurgery/wp-content/uploads/sites/33974/2020/06/bm_SMed_Surgery_RF2_st_4c.png" >
